@@ -22,7 +22,10 @@ app.get("/restaurants", (req, res) => {
 
 //show details
 app.get("/restaurants/:id", (req, res) => {
-  res.render("show")
+  const id = Number(req.params.id)
+  const restaurant = restaurants.find((restaurant) => (restaurant.id === id))
+  console.log(restaurant)
+  res.render("show", {restaurant})
 })
 
 app.listen(port, () => {
