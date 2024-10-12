@@ -1,6 +1,11 @@
 const express = require("express")
 const app = express()
 const port = 3000
+const {engine} = require("express-handlebars")
+
+app.engine(".hbs", engine({extname: ".hbs"}))
+app.set("view engine", ".hbs")
+app.set("views", "./views")
 
 //set up the root
 app.get("/", (req, res) => {
@@ -10,7 +15,7 @@ app.get("/", (req, res) => {
 app.use(express.static("public"))
 //list all restaurants
 app.get("/restaurants", (req, res) => {
-  res.send("restaurant will render here")
+  res.render("index")
 })
 
 app.listen(port, () => {
