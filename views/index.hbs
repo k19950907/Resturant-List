@@ -22,7 +22,7 @@
         <h4 class="mb-2">尋找餐廳：</h4>
         <div class="input-group">
           <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類" aria-label="Restaurant Name..."
-            value="" aria-describedby="search-button">
+            value="{{keyword}}" aria-describedby="search-button">
           <div class="input-group-append">
             <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
           </div>
@@ -36,7 +36,17 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-10 col-12 mx-auto">
-      <div class="row row-cols-sm-3">
+
+      <div class = "checkboxes">
+        {{#each categories as |category|}}
+        <span>
+          <input type="checkbox" class="checkbox" id="{{category}}">
+          <label>{{category}}</label>
+        </span>
+        {{/each}}
+      </div>
+
+      <div class="row row-cols-sm-3" id="restaurants">
 
         {{#each restaurants as |restaurant|}}
         <a href="/restaurants/{{restaurant.id}}" class="text-secondary">
@@ -58,7 +68,7 @@
           </div>
         </a>
         {{/each}}
-        
+
       </div>
     </div>
   </div>
