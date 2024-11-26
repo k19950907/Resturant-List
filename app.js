@@ -8,13 +8,12 @@ app.engine(".hbs", engine({extname: ".hbs"}))
 app.set("view engine", ".hbs")
 app.set("views", "./views")
 app.use(express.json())
+app.use(express.static("public"))
 
 //set up the root
 app.get("/", (req, res) => {
   res.redirect("/restaurants")
 })
-
-app.use(express.static("public"))
 
 //list all restaurants 
 app.get("/restaurants", (req, res) => {
@@ -23,18 +22,18 @@ app.get("/restaurants", (req, res) => {
   res.render("index", {restaurants, categories})
 })
 
+//show details
+app.get("/restaurants/:id", (req, res) => {
+  const id = Number(req.params.id)
+  const restaurant = restaurants.find((restaurant) => (restaurant.id === id))
+  res.render("show", { restaurant })
+})
+
 //show searched restaurants (only search in name or category)
 app.get("/search", (req, res) => {
   const keyword = req.query.keyword?.toLowerCase()
   const matchedRestaurants = restaurants.filter((restaurant) => (restaurant.name.includes(keyword) || restaurant.category.includes(keyword)))
   res.render("index", {restaurants: matchedRestaurants, keyword})
-})
-
-//show details
-app.get("/restaurants/:id", (req, res) => {
-  const id = Number(req.params.id)
-  const restaurant = restaurants.find((restaurant) => (restaurant.id === id))
-  res.render("show", {restaurant})
 })
 
 app.listen(port, () => {
@@ -50,4 +49,29 @@ app.post("/restaurants", (req, res) => {
   }else{
     res.json({restaurants: restaurants})
   }
+})
+
+//page for creating restaurant
+app.get("/restaurants/new", (req, res) => {
+  res.send("this is the page where you can add new restaurant")
+})
+
+//creating restaurant
+app.post("/restaurants", (req, res) => {
+  res.send("add new restaurant")
+})
+
+//page for updating a restaurant
+app.get("/restaurants/:id/edit", (req, res) => {
+  res.send("this is the page to update restaurant")
+})
+
+//update restaurant
+app.put("/restaurants/:id", (req, res) => {
+  res.send("update restaurant")
+})
+
+//delete restaurant
+app.delete("/restaurants/:id", (req, res) => {
+  res.send("delete restaurant")
 })
