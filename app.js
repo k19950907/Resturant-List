@@ -4,6 +4,10 @@ const port = 3000
 const {engine} = require("express-handlebars")
 const restaurants = require("./public/jsons/restaurant.json").results
 
+const db = require("./models")
+const { DataTypes, STRING } = require("sequelize")
+const Restaurant = db.Restaurant
+
 app.engine(".hbs", engine({extname: ".hbs"}))
 app.set("view engine", ".hbs")
 app.set("views", "./views")
@@ -12,7 +16,10 @@ app.use(express.static("public"))
 
 //set up the root
 app.get("/", (req, res) => {
-  res.redirect("/restaurants")
+  //res.redirect("/restaurants")
+  return Restaurant.findAll()
+    .then((restaurants) => res.send ({ restaurants }))
+    .catch((err) => res.status(422).json(err))
 })
 
 //list all restaurants 
