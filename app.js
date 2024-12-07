@@ -2,7 +2,6 @@ const express = require("express")
 const app = express()
 const port = 3000
 const {engine} = require("express-handlebars")
-const restaurants = require("./public/jsons/restaurant.json").results
 
 const db = require("./models")
 const { DataTypes, STRING } = require("sequelize")
@@ -16,17 +15,16 @@ app.use(express.static("public"))
 
 //set up the root
 app.get("/", (req, res) => {
-  //res.redirect("/restaurants")
-  return Restaurant.findAll()
-    .then((restaurants) => res.send ({ restaurants }))
-    .catch((err) => res.status(422).json(err))
+  res.redirect("/restaurants")
 })
 
 //list all restaurants 
 app.get("/restaurants", (req, res) => {
-  //get categories
-  const categories = [...new Set(restaurants.map((restaurant) => (restaurant.category)))]
-  res.render("index", {restaurants, categories})
+  return Restaurant.findAll({
+    raw: true
+  })
+    .then((restaurants) => res.render("index", { restaurants }))
+    .catch((err) => res.status(422).json(err))
 })
 
 //show details

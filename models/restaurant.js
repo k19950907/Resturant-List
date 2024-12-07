@@ -19,9 +19,9 @@ module.exports = (sequelize, DataTypes) => {
     category: DataTypes.STRING,
     image: DataTypes.STRING,
     location: DataTypes.STRING,
-    phone: DataTypes.INTERGER,
+    phone: DataTypes.STRING,
     google_map: DataTypes.STRING,
-    rating: DataTypes.INTERGER,
+    rating: DataTypes.FLOAT,
     description: DataTypes.STRING
   }, 
     {
