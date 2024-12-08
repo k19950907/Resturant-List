@@ -57,11 +57,10 @@ app.delete("/restaurants/:id", (req, res) => {
 
 //show details
 app.get("/restaurants/:id", (req, res) => {
-  const id = Number(req.params.id)
-  return Restaurant.findAll({
+  const id = req.params.id
+  return Restaurant.findByPk(id, {
     raw:true
   })
-    .then((restaurants) => restaurants.find((restaurant) => (restaurant.id === id)))
     .then((restaurant) => res.render("show", { restaurant }))
     .catch((err) => res.status(422).json(err))
   
