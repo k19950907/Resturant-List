@@ -12,6 +12,7 @@ app.set("view engine", ".hbs")
 app.set("views", "./views")
 app.use(express.json())
 app.use(express.static("public"))
+app.use(express.urlencoded({extended: true}))
 
 //set up the root
 app.get("/", (req, res) => {
@@ -25,6 +26,33 @@ app.get("/restaurants", (req, res) => {
   })
     .then((restaurants) => res.render("index", { restaurants }))
     .catch((err) => res.status(422).json(err))
+})
+
+//page for creating restaurant
+app.get("/restaurants/new", (req, res) => {
+  res.render("new", {})
+})
+
+//creating restaurant
+app.post("/restaurants", (req, res) => {
+  return Restaurant.create(req.body)
+    .then(() => res.redirect("/restaurants"))
+    .catch((err) => console.log(err))
+})
+
+//page for updating a restaurant
+app.get("/restaurants/:id/edit", (req, res) => {
+  res.send("this is the page to update restaurant")
+})
+
+//update restaurant
+app.put("/restaurants/:id", (req, res) => {
+  res.send("update restaurant")
+})
+
+//delete restaurant
+app.delete("/restaurants/:id", (req, res) => {
+  res.send("delete restaurant")
 })
 
 //show details
@@ -60,31 +88,6 @@ app.get("/search", (req, res) => {
 //    res.json({restaurants: restaurants})
 //  }
 //})
-
-//page for creating restaurant
-app.get("/restaurants/new", (req, res) => {
-  res.send("this is the page where you can add new restaurant")
-})
-
-//creating restaurant
-app.post("/restaurants", (req, res) => {
-  res.send("add new restaurant")
-})
-
-//page for updating a restaurant
-app.get("/restaurants/:id/edit", (req, res) => {
-  res.send("this is the page to update restaurant")
-})
-
-//update restaurant
-app.put("/restaurants/:id", (req, res) => {
-  res.send("update restaurant")
-})
-
-//delete restaurant
-app.delete("/restaurants/:id", (req, res) => {
-  res.send("delete restaurant")
-})
 
 app.listen(port, () => {
   console.log("server running on express.js")
