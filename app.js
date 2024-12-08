@@ -2,6 +2,8 @@ const express = require("express")
 const app = express()
 const port = 3000
 const {engine} = require("express-handlebars")
+const methodOverride = require('method-override')
+
 
 const db = require("./models")
 const { DataTypes, STRING } = require("sequelize")
@@ -13,6 +15,7 @@ app.set("views", "./views")
 app.use(express.json())
 app.use(express.static("public"))
 app.use(express.urlencoded({extended: true}))
+app.use(methodOverride('_method'))
 
 //set up the root
 app.get("/", (req, res) => {
@@ -42,12 +45,31 @@ app.post("/restaurants", (req, res) => {
 
 //page for updating a restaurant
 app.get("/restaurants/:id/edit", (req, res) => {
-  res.send("this is the page to update restaurant")
+  const id = req.params.id
+  return Restaurant.findByPk(id, {
+    raw: true
+  })
+    .then((restaurant) => res.render("update", { restaurant }))
+    .catch((err) => res.status(422).json(err))
 })
 
 //update restaurant
 app.put("/restaurants/:id", (req, res) => {
-  res.send("update restaurant")
+  const id = req.params.id
+  const body = req.body
+  console.log(req.body)
+  return Restaurant.update({
+    name: body.name,
+    name_en: body.name_en,
+    category: body.category,
+    image: body.image,
+    location: body.location,
+    phone: body.phone,
+    google_map: body.google_map,
+    rating: body.rating,
+    description: body.description
+    }, {where: { id }})
+    .then(() => res.redirect(`/restaurants/${id}`))
 })
 
 //delete restaurant
