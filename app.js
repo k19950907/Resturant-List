@@ -30,31 +30,36 @@ app.get("/restaurants", (req, res) => {
 //show details
 app.get("/restaurants/:id", (req, res) => {
   const id = Number(req.params.id)
-  const restaurant = restaurants.find((restaurant) => (restaurant.id === id))
-  res.render("show", { restaurant })
+  return Restaurant.findAll({
+    raw:true
+  })
+    .then((restaurants) => restaurants.find((restaurant) => (restaurant.id === id)))
+    .then((restaurant) => res.render("show", { restaurant }))
+    .catch((err) => res.status(422).json(err))
+  
 })
 
 //show searched restaurants (only search in name or category)
 app.get("/search", (req, res) => {
   const keyword = req.query.keyword?.toLowerCase()
-  const matchedRestaurants = restaurants.filter((restaurant) => (restaurant.name.includes(keyword) || restaurant.category.includes(keyword)))
-  res.render("index", {restaurants: matchedRestaurants, keyword})
-})
-
-app.listen(port, () => {
-  console.log("server running on express.js")
+  return Restaurant.findAll({
+    raw: true
+  })
+    .then((restaurants) => restaurants.filter((restaurant) => (restaurant.name.includes(keyword) || restaurant.category.includes(keyword))))
+    .then((restaurant) => res.render("index", {restaurants: restaurant, keyword}))
+    .catch((err) => res.status(422).json(err))
 })
 
 //render by selected categories
-app.post("/restaurants", (req, res) => {
-  const selectedCategories = req.body.categories
-  const sortedRestaurants = restaurants.filter((restaurant) => selectedCategories.includes(restaurant.category))
-  if(sortedRestaurants.length > 0){
-    res.json({restaurants: sortedRestaurants})
-  }else{
-    res.json({restaurants: restaurants})
-  }
-})
+//app.post("/restaurants", (req, res) => {
+//  const selectedCategories = req.body.categories
+//  const sortedRestaurants = restaurants.filter((restaurant) => selectedCategories.includes(restaurant.category))
+//  if(sortedRestaurants.length > 0){
+//    res.json({restaurants: sortedRestaurants})
+//  }else{
+//    res.json({restaurants: restaurants})
+//  }
+//})
 
 //page for creating restaurant
 app.get("/restaurants/new", (req, res) => {
@@ -79,4 +84,8 @@ app.put("/restaurants/:id", (req, res) => {
 //delete restaurant
 app.delete("/restaurants/:id", (req, res) => {
   res.send("delete restaurant")
+})
+
+app.listen(port, () => {
+  console.log("server running on express.js")
 })
