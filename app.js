@@ -74,7 +74,9 @@ app.put("/restaurants/:id", (req, res) => {
 
 //delete restaurant
 app.delete("/restaurants/:id", (req, res) => {
-  res.send("delete restaurant")
+  const id = req.params.id
+  return Restaurant.destroy({ where: { id } })
+    .then(() => res.redirect("/restaurants"))
 })
 
 //show details
@@ -85,7 +87,6 @@ app.get("/restaurants/:id", (req, res) => {
   })
     .then((restaurant) => res.render("show", { restaurant }))
     .catch((err) => res.status(422).json(err))
-  
 })
 
 //show searched restaurants (only search in name or category)

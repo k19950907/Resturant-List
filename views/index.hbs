@@ -57,7 +57,9 @@
           <div style="display: flex"> 
             <a href="/restaurants/{{restaurant.id}}" class="text-secondary mx-2 mb-1" style="display:flex">Details</a>
             <a href="/restaurants/{{restaurant.id}}/edit" class="text-secondary mx-2 mb-1" style="display:flex">Edit</a>
-            <a href="/restaurants/{{restaurant.id}}/edit" class="text-secondary mx-2 mb-1" style="display:flex">Delete</a>
+            <form action="/restaurants/{{restaurant.id}}?_method=DELETE" method="POST">
+              <button type="submit" class="mb-1">Delete</button>
+            </form>
           </div>
         </div>
         {{/each}}
