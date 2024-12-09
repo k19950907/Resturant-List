@@ -40,8 +40,10 @@
       <div class="row row-cols-sm-3" id="restaurants">
         {{#each restaurants as |restaurant|}}
         <div class="card mb-3">
-          <img class="card-img-top" src="{{restaurant.image}}"
-            alt="{{restaurant.name}}">
+          <a href="/restaurants/{{restaurant.id}}">
+            <img class="card-img-top" src="{{restaurant.image}}"
+              alt="{{restaurant.name}}">
+          </a>
           <div class="card-body p-3">
             <h6 class="card-title mb-1">{{restaurant.name}}</h6>
 
@@ -55,10 +57,11 @@
             </span>
           </div>
           <div style="display: flex"> 
-            <a href="/restaurants/{{restaurant.id}}" class="text-secondary mx-2 mb-1" style="display:flex">Details</a>
-            <a href="/restaurants/{{restaurant.id}}/edit" class="text-secondary mx-2 mb-1" style="display:flex">Edit</a>
+            <a href="/restaurants/{{restaurant.id}}/edit" class="text-secondary mx-2 mb-1" style="display:flex text-decoration: none">
+              <button type="submit" class="mb-1" style="border: none">Edit</button>
+            </a>
             <form action="/restaurants/{{restaurant.id}}?_method=DELETE" method="POST">
-              <button type="submit" class="mb-1">Delete</button>
+              <button type="submit" class="mb-1" style="border: none">Delete</button>
             </form>
           </div>
         </div>
