@@ -14,7 +14,12 @@ router.get("/", (req, res) => {
   return Restaurant.findAll({
     raw: true
   })
-    .then((restaurants) => res.render("index", { restaurants }))
+    .then((restaurants) => {
+      res.render("index", { 
+        restaurants, 
+        successMessage: req.flash("success"), 
+        failMessage: req.flash("fail") })
+    })
     .catch((err) => res.status(422).json(err))
 })
 
@@ -26,8 +31,15 @@ router.get("/new", (req, res) => {
 //creating restaurant
 router.post("/", (req, res) => {
   return Restaurant.create(req.body)
-    .then(() => res.redirect("/"))
-    .catch((err) => console.log(err))
+    .then(() => {
+      req.flash("success", "Creating new restaurant succeed")
+      res.redirect("/")
+    })
+    .catch((err) => {
+      req.flash("fail", "Creating new restaurant failed")
+      res.status(422).json(err)
+      res.redirect("/")
+    })
 })
 
 //page for updating a restaurant
@@ -57,15 +69,30 @@ router.put("/:id", (req, res) => {
     rating: body.rating,
     description: body.description
   }, { where: { id } })
-    .then(() => res.redirect(`/restaurants/${id}`))
-    .catch((err) => res.status(422).json(err))
+    .then(() => {
+      req.flash("success", "Updating restaurant succeed")
+      res.redirect(`/restaurants/${id}`)
+    })
+    .catch((err) => {
+      req.flash("fail", "Updating restaurant failed")
+      res.status(422).json(err)
+      res.redirect(`/restaurants/${id}`)
+    })
 })
 
 //delete restaurant
 router.delete("/:id", (req, res) => {
   const id = req.params.id
   return Restaurant.destroy({ where: { id } })
-    .then(() => res.redirect("/"))
+    .then(() => {
+      req.flash("success", "Deleting restaurant succeed")
+      res.redirect("/")
+    })
+    .catch((err) => {
+      req.flash("fail", "Deleting restaurant failed")
+      res.status(422).json(err)
+      res.redirect("/")
+    })
 })
 
 //show details
@@ -74,7 +101,11 @@ router.get("/:id", (req, res) => {
   return Restaurant.findByPk(id, {
     raw: true
   })
-    .then((restaurant) => res.render("show", { restaurant }))
+    .then((restaurant) => res.render("show", { 
+      restaurant, 
+      successMessage: req.flash("success"),
+      failMessage: req.flash("fail")
+    }))
     .catch((err) => res.status(422).json(err))
 })
 

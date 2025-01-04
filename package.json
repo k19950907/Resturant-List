@@ -11,8 +11,10 @@
   "license": "ISC",
   "description": "a practice of bulding server on express.js",
   "dependencies": {
+    "connect-flash": "^0.1.1",
     "express": "^4.21.1",
     "express-handlebars": "^8.0.1",
+    "express-session": "^1.17.3",
     "method-override": "^3.0.0",
     "mysql2": "^3.2.0",
     "sequelize": "^6.30.0",
